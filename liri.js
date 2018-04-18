@@ -14,9 +14,16 @@ spotify.search({ type: "track", query: songSearch, limit: 3 }, function(err, dat
   }
 
   //console.log(JSON.stringify(data, null, 2));
-
-  console.log(JSON.stringify(data.tracks.items[0].album.artists[0].name))
-
+  console.log("\n~*~*~*~*~*~*~*~*~*~*~\n")
+  console.log("ARTIST NAME: " + JSON.stringify(data.tracks.items[0].album.artists[0].name));
+  console.log("SONG TITLE: " + JSON.stringify(data.tracks.items[0].name));
+  if (JSON.stringify(data.tracks.items[0].preview_url) == null) {
+    console.log("PREVIEW LINK IS UNAVAILABLE" + data.tracks.items[0].preview_url);
+  } else {
+    console.log("PREVIEW LINK: " + JSON.stringify(data.tracks.items[0].preview_url));
+  }
+  console.log("ALBUM TITLE: " + JSON.stringify(data.tracks.items[0].album.name))
+  console.log("\n~*~*~*~*~*~*~*~*~*~*~\n")
 });
 //   var tracksResponseArray = data.tracks.items;
 // 	// Get number of tracks in the response
