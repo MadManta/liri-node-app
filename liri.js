@@ -7,6 +7,9 @@ var query = process.argv[3];
 
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
+var request = require("request");
+var omdb = keys.omdb;
+var fs = require("fs");
 
 if (mode === "spotify-this-song") {
   spotify.search({ type: "track", query: query, limit: 3 }, function(err, data) {
@@ -29,16 +32,40 @@ if (mode === "spotify-this-song") {
 
 } else if (mode === "my-tweets") {
 
-var Twitter = require('twitter');
- 
-var client = new Twitter(keys.twitter);
-
-  var params = {screen_name: 'shrinkymachine'};
-  client.get('statuses/user_timeline', params, function(error, tweets, response) {
-    if (!error) {
-      for (var i = 0; i < 20; i++) {
-        console.log(tweets[i].text + "\nCreated on: " + tweets[i].created_at);
+  var Twitter = require('twitter');
+   
+  var client = new Twitter(keys.twitter);
+  
+    var params = {screen_name: 'shrinkymachine'};
+    client.get('statuses/user_timeline', params, function(error, tweets, response) {
+      if (!error) {
+        for (var i = 0; i < 20; i++) {
+          console.log("Tweet: " + tweets[i].text + "\nCreated on: " + tweets[i].created_at + "\n\n~*~*~*~*~*~*~*~*~*~*~\n");
+        }
       }
-    }
+    });
+  }
+else if (mode === "movie-this") {
+
+  request ("http://www.omdbapi.com/?apikey=" + omdb.id + "&t=" + query, function (error, response, data) {
+    var movie = JSON.parse(data)
+    console.log("\n~*~*~*~*~*~*~*~*~*~*~\n")
+    console.log("TITLE: " + movie.Title);
+    console.log("YEAR: "  + movie.Year);
+    console.log("RATING: " + movie.Rated);
+    console.log("COUNTRY: " + movie.Country);
+    console.log("PLOT: " + movie.Plot);
+    console.log("ACTORS: " + movie.Actors);
+    console.log("ROTTEN TOMATOES RATING: " + movie.Ratings[1].Value);
+    console.log("\n~*~*~*~*~*~*~*~*~*~*~\n");
   });
-}
+
+} else if (mode === "do-what-it-says") {
+  fs.readFile("random.txt", "UTF8", (err, data) => {
+    if (err) throw err;
+    console.log(data);
+  }
+)
+};
+
+
